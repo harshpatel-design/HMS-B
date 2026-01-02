@@ -5,7 +5,6 @@ export const connectDB = async (mongoUrl) => {
   try {
     mongoose.set("strictQuery", false);
     await mongoose.connect(mongoUrl, {
-      // options are now defaults in Mongoose 7+
     });
     logger.info("MongoDB connected");
   } catch (err) {
