@@ -33,15 +33,7 @@ import floorRoutes from "./routes/floor.routes.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
-
-if (!fs.existsSync("uploads")) fs.mkdirSync("uploads");
-if (!fs.existsSync("uploads/users")) fs.mkdirSync("uploads/users");
-if (!fs.existsSync("uploads/patients")) fs.mkdirSync("uploads/patients");
-if (!fs.existsSync("uploads/appointments"))
-  fs.mkdirSync("uploads/appointments");
-
 const app = express();
-
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
@@ -56,9 +48,7 @@ app.use(
     credentials: true,
   })
 );
-
 app.options("*", cors());
-
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true, limit: "20mb" }));
 
@@ -71,6 +61,18 @@ app.use(
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+
+const uploadBase = path.join(process.cwd(), "uploads");
+const userUploads = path.join(uploadBase, "users");
+const patientUploads = path.join(uploadBase, "patients");
+const appointmentUploads = path.join(uploadBase, "appointments");
+
+[uploadBase, userUploads, patientUploads, appointmentUploads].forEach((dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+});
 
 app.use(
   "/uploads/users",
@@ -111,14 +113,6 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use(errorHandler);
-
-const folder = path.join(__dirname, "uploads/users");
-
-fs.readdirSync(folder).forEach((file) => {
-  if (!file.includes(".")) {
-    fs.renameSync(path.join(folder, file), path.join(folder, file + ".png"));
-  }
-});
 
 const start = async () => {
   await connectDB(process.env.MONGO_URL);
