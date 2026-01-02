@@ -36,9 +36,9 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 if (!fs.existsSync("uploads")) fs.mkdirSync("uploads");
-if (!fs.existsSync("uploads/users")) fs.mkdirSync("uploads/users");
-if (!fs.existsSync("uploads/patients")) fs.mkdirSync("uploads/patients");
-if (!fs.existsSync("uploads/appointments")) fs.mkdirSync("uploads/appointments");
+fs.mkdirSync("uploads/users", { recursive: true });
+fs.mkdirSync("uploads/patients", { recursive: true });
+fs.mkdirSync("uploads/appointments", { recursive: true });
 
 const app = express();
 
