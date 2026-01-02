@@ -6,10 +6,17 @@ export const sendEmail = async (to, subject, html) => {
     port: Number(process.env.SMTP_PORT) || 587,
     secure: false,
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      user: process.env.SMTP_EMAIL,
+      pass: process.env.SMTP_PASSWORD,
     },
   });
+
+  try {
+    await transporter.verify();
+  } catch (verifyErr) {
+    console.error("SMTP verify failed:", verifyErr);
+    throw verifyErr;
+  }
 
   await transporter.sendMail({
     from: process.env.SMTP_EMAIL,

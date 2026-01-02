@@ -14,6 +14,7 @@ const chargeMasterSchema = new mongoose.Schema(
       uppercase: true,
       trim: true,
     },
+
     chargeType: {
       type: String,
       enum: [

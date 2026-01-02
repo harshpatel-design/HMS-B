@@ -14,13 +14,13 @@ export const createUserService = async (data) => {
     }
 
     const user = new User({
-        name,
-        email,
-        password: hashedPassword,
-        role,
-        phone,
-        gender,
-        age
+      name,
+      email,
+      password: hashedPassword,
+      role,
+      phone,
+      gender,
+      age,
     });
     await user.save();
     return user;

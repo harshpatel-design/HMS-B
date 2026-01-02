@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const specializationSchema = new mongoose.Schema(__dirname
+const specializationSchema = new mongoose.Schema(
     {
         name: {
             type: String,

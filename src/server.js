@@ -13,6 +13,7 @@ import { fileURLToPath } from "url";
 
 import authRoutes from "./routes/auth.routes.js";
 import doctorRoutes from "./routes/doctor.routes.js";
+import chargeMasterRoutes from "./routes/chargeMaster.routes.js";
 import labTechnicianRoutes from "./routes/labTechnician.routes.js";
 import specializationRoutes from "./routes/specialization.routes.js";
 import recipientRoutes from "./routes/recipient.routes.js";
@@ -81,6 +82,7 @@ app.use("/api/lab-technicians", labTechnicianRoutes);
 app.use("/api/recipients", recipientRoutes);
 app.use("/api/patients", patientRoutes);
 app.use("/api/services", serviceRoutes);
+app.use("/api/charge-master", chargeMasterRoutes);
 
 app.use("/api/appointments", appointmentRoutes);
 

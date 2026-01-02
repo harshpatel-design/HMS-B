@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Doctor from "./doctor.model.js"; // REQUIRED for fee lookup
+import Doctor from "./doctor.model.js";
 
 const addressSchema = new mongoose.Schema({
   line1: { type: String, default: "" },

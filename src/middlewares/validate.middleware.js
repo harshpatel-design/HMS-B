@@ -1,8 +1,3 @@
-/**
- * Validates request body against a Joi schema
- * @param {Joi.Schema} schema - Joi validation schema
- * @returns {Function} Express middleware function
- */
 export const validateBody = (schema) => (req, res, next) => {
   const { error, value } = schema.validate(req.body, {
     abortEarly: false,
@@ -15,20 +10,13 @@ export const validateBody = (schema) => (req, res, next) => {
     return res.status(400).json({
       success: false,
       message: "Validation error",
-      errors: details
+      errors: details && details
     });
   }
-
-  // Replace req.body with the validated and sanitized value
   req.body = value;
   next();
 };
 
-/**
- * Validates query parameters against a Joi schema
- * @param {Joi.Schema} schema - Joi validation schema
- * @returns {Function} Express middleware function
- */
 export const validateQuery = (schema) => (req, res, next) => {
   const { error, value } = schema.validate(req.query, {
     abortEarly: false,
@@ -44,17 +32,10 @@ export const validateQuery = (schema) => (req, res, next) => {
       errors: details
     });
   }
-
-  // Replace req.query with the validated and sanitized value
   req.query = value;
   next();
 };
 
-/**
- * Validates request parameters against a Joi schema
- * @param {Joi.Schema} schema - Joi validation schema
- * @returns {Function} Express middleware function
- */
 export const validateParams = (schema) => (req, res, next) => {
   const { error, value } = schema.validate(req.params, {
     abortEarly: false,
@@ -71,12 +52,17 @@ export const validateParams = (schema) => (req, res, next) => {
     });
   }
 
-  // Replace req.params with the validated and sanitized value
   req.params = value;
   next();
 };
 
-// Default export for backward compatibility
+export const validationError = (message, errors) => {
+  const err = new Error(message);
+  err.statusCode = 400;
+  err.errors = errors;
+  return err;
+};
+
 export default (schema) => (req, res, next) => {
   const { error } = schema.validate(req.body, {
     abortEarly: false,

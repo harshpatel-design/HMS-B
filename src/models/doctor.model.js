@@ -1,4 +1,3 @@
-import { required } from "joi";
 import mongoose from "mongoose";
 
 
@@ -10,14 +9,46 @@ const DoctorSchema = new mongoose.Schema(
       required: true
     },
 
-    specialization: { type: String, required: true },
+    address: {
+      line1: {
+        type: String,
+        trim: true,
+      },
+      line2: {
+        type: String,
+        trim: true,
+      },
+      city: {
+        type: String,
+        trim: true,
+      },
+      state: {
+        type: String,
+        trim: true,
+      },
+      pincode: {
+        type: String,
+        trim: true,
+      },
+      country: {
+        type: String,
+        default: "India",
+      },
+    },
+    specialization: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Specialization",
+      required: true
+    },
+
     department: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Department",
       required: true
     },
-    
+
     experience: { type: Number, default: 0 },
+
     bio: { type: String },
 
     education: [
@@ -27,16 +58,92 @@ const DoctorSchema = new mongoose.Schema(
         year: Number
       }
     ],
+    schedule: [
+      {
+        day: {
+          type: String,
+          enum: [
+            "MONDAY",
+            "TUESDAY",
+            "WEDNESDAY",
+            "THURSDAY",
+            "FRIDAY",
+            "SATURDAY",
+            "SUNDAY",
+          ],
+          required: true,
+        },
 
-    availability: {
-      monday: { type: Boolean, default: false },
-      tuesday: { type: Boolean, default: false },
-      wednesday: { type: Boolean, default: false },
-      thursday: { type: Boolean, default: false },
-      friday: { type: Boolean, default: false },
-      saturday: { type: Boolean, default: false },
-      sunday: { type: Boolean, default: false }
+        sessions: [
+          {
+            sessionName: {
+              type: String,
+              enum: ["MORNING", "AFTERNOON", "EVENING"],
+              required: true,
+            },
+
+            from: {
+              type: String,
+              required: true,
+            },
+
+            to: {
+              type: String,
+              required: true,
+            },
+          },
+        ],
+      },
+    ],
+    appointmentType: {
+      type: String,
+      enum: ["ONLINE", "IN_PERSON", "BOTH"],
+      default: "IN_PERSON",
     },
+
+    advanceBookingDays: {
+      type: Number,
+      default: 7,
+      min: 0,
+    },
+
+    slotDuration: {
+      type: Number,
+      default: 15,
+    },
+
+    maxBookingsPerSlot: {
+      type: Number,
+      default: 1,
+    },
+
+    awards: [
+      {
+        name: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+
+
+        date: {
+          type: Date,
+        },
+      },
+    ],
+
+    certifications: [
+      {
+        name: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        date: {
+          type: Date,
+        },
+      },
+    ],
 
     status: {
       type: String,

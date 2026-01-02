@@ -15,23 +15,15 @@ import { parseMultipartJSON } from "../middlewares/parseMultipartJSON.js";
 
 const router = express.Router();
 
-
-/* -----------------------------------------------------------
-   CREATE DOCTOR  (Admin Only)
------------------------------------------------------------ */
 router.post(
     "/create-doctor",
     verifyToken,
     allowRoles("admin"),
     uploadUserPhoto.single("image"),
-    parseMultipartJSON([ "education", "availability"]),
+    parseMultipartJSON(["education", "schedule", "address", "awards", "certifications"]),
     validateBody(createDoctorSchema),
     createDoctor
 );
-
-/* -----------------------------------------------------------
-   GET ALL DOCTORS  (Admin Only)
------------------------------------------------------------ */
 router.get(
     "/doctors",
     verifyToken,
@@ -39,32 +31,28 @@ router.get(
     getAllDoctors
 );
 
-/* -----------------------------------------------------------
-   GET SINGLE DOCTOR  (Admin Only)
------------------------------------------------------------ */
 router.get(
     "/doctors/:userId",
     verifyToken,
     allowRoles("admin"),
     getDoctorById
 );
-
-/* -----------------------------------------------------------
-   UPDATE DOCTOR  (Admin Only)
------------------------------------------------------------ */
 router.patch(
-    "/doctors/:userId",
-    verifyToken,
-    allowRoles("admin"),
-    uploadUserPhoto.single("image"),
-    parseMultipartJSON(["education", "availability"]), 
-    validateBody(updateDoctorSchema),
-    updateDoctor
+  "/doctors/:userId",
+  verifyToken,
+  allowRoles("admin"),
+  uploadUserPhoto.single("image"),
+  parseMultipartJSON([
+    "education",
+    "schedule",
+    "address",
+    "awards",
+    "certifications",
+  ]),
+  validateBody(updateDoctorSchema),
+  updateDoctor
 );
 
-/* -----------------------------------------------------------
-   DELETE DOCTOR  (Admin Only)
------------------------------------------------------------ */
 router.delete(
     "/doctors/:userId",
     verifyToken,
