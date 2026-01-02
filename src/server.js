@@ -1,7 +1,24 @@
+import dotenv from "dotenv";
 dotenv.config();
+
+import express from "express";
+import helmet from "helmet";
+import cors from "cors";
+import rateLimit from "express-rate-limit";
+import fs from "fs";
+import path from "path";
+
+import { connectDB } from "./config/db.js";
+import logger from "./utils/logger.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
+
+// ROUTES (make sure these imports exist)
+import authRoutes from "./routes/auth.routes.js";
+// import other routes here...
+
 const PORT = process.env.PORT || 5000;
 
-// create folders safely
+// create folders safely (Render-safe)
 fs.mkdirSync("uploads/users", { recursive: true });
 fs.mkdirSync("uploads/patients", { recursive: true });
 fs.mkdirSync("uploads/appointments", { recursive: true });
@@ -21,18 +38,18 @@ app.use("/uploads/appointments", express.static(path.join(process.cwd(), "upload
 
 // routes
 app.get("/api/health", (req, res) => {
-    res.json({ status: "ok", message: "Server is running" });
+  res.json({ status: "ok", message: "Server is running" });
 });
 
 app.use("/api/auth", authRoutes);
-// ... other routes
+// app.use("/api/doctors", doctorRoutes); // add others back later
 
 app.use(errorHandler);
 
 // start server
 const start = async () => {
-    await connectDB(process.env.MONGO_URL);
-    app.listen(PORT, () => logger.info(`🚀 Server running at port ${PORT}`));
+  await connectDB(process.env.MONGO_URL);
+  app.listen(PORT, () => logger.info(`🚀 Server running at port ${PORT}`));
 };
 
 start();
